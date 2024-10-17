@@ -1,0 +1,49 @@
+name: 'Apiable API Automation Action'
+description: 'A custom GitHub action for API automation with Apiable'
+author: 'Apiable'
+inputs:
+  api_key:
+    description: 'API Key'
+    required: true
+  api_secret:
+    description: 'API Secret'
+    required: true
+  api_url:
+    description: 'Base URL for Apiable API'
+    required: true
+  open_api_spec_url:
+    description: 'URL to download OpenAPI spec'
+    required: true
+  planid:
+    description: 'The plan id to add documentation to'
+    required: true
+outputs:
+  response:
+    description: 'Response from the API'
+    value: ${{ steps.upload-doc.outputs.response }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Install Dependencies
+      working-directory: .github/actions/apiable
+      shell: bash
+      run: |
+        pip install -r requirements.txt
+    - name: Pass Inputs to Shell
+      shell: bash
+      run: |
+        # https://github.com/actions/runner/issues/665
+        echo "api_key=${{ inputs.api_key }}" >> $GITHUB_ENV
+        echo "api_secret=${{ inputs.api_secret }}" >> $GITHUB_ENV
+        echo "api_url=${{ inputs.api_url }}" >> $GITHUB_ENV
+        echo "open_api_spec_url=${{ inputs.open_api_spec_url }}" >> $GITHUB_ENV
+        echo "planid=${{ inputs.planid }}" >> $GITHUB_ENV
+    - name: upload doc
+      shell: bash
+      id: upload-doc
+      run: |
+        python src/upload-doc.py

@@ -1,0 +1,64 @@
+HELP.md
+.gradle/
+build/
+!backend/gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+.DS_Store
+temp/
+logs/
+logging.file.path_IS_UNDEFINED/
+data/
+.env*
+
+### frontend
+node_modules/
+.env
+cypress.config.ts
+public/locales
+
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+/frontend/cypress/videos
+/frontend/cypress/screenshots
+
+### IntelliJ HttpClient ###
+.idea/httpRequests/
+.private.env.json
+/backend/http/http-client.private.env.json
+/backend/apigee-apiable-*.json
+/backend/consumers.json
+/backend/keys.json
+
+### Generated frontend files ###
+/frontend/public/robots.txt
+/frontend/public/sitemap.xml
