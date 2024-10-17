@@ -6,74 +6,21 @@ on:
       - master
     paths-ignore:
       - '*.md'
-env:
-  AWS_REGION: eu-central-1
-  SCRIPT_READ_KEYS: |
-    echo "PORTAL(DEPLOYMENT)=$PORTAL"
-    SEC=$(aws secretsmanager get-secret-value --secret-id portal/$PORTAL)
-    KEYS=$(echo $SEC | jq -r '.SecretString' | jq -r 'keys[]')
-    for KEY in ${KEYS}; do
-      # shellcheck disable=SC2039
-      if [[ "$KEY" == *"APIABLE_DEVELOPER_PORTAL_CLIENT_"* ]]; then
-        VAL=$(echo $SEC | jq -r '.SecretString' | jq -r  ".${KEY}")
-        echo "$KEY=$VAL" >> $GITHUB_ENV
-      fi
-    done
 
 jobs:
-  init:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix-portals: ${{ steps.set-matrix-portals.outputs.matrix-portals }}
-    steps:
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set matrix portals
-        id: set-matrix-portals
-        env:
-          REF: ${{ github.ref }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        run: |
-          DEPLOYMENTS_PORTALS=$(echo '["deployments/apiable-elb2/portals/dev.yaml"]' | jq -c .)
-          echo "matrix-portals=$DEPLOYMENTS_PORTALS" >> $GITHUB_OUTPUT
-          echo "DEPLOYMENTS_PORTALS=$DEPLOYMENTS_PORTALS" >> $GITHUB_ENV
-          echo "DEPLOYMENTS_PORTALS=$DEPLOYMENTS_PORTALS"
-
   cicd:
     runs-on: ubuntu-latest
-    needs: [ init ]
-    strategy:
-      matrix:
-        portals: ${{ fromJson(needs.init.outputs.matrix-portals) }}
     steps:
 
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Read secrets
-        env:
-          DEPLOYMENT: ${{ matrix.portals }}
-        run: |
-          echo $DEPLOYMENT
-          D=${DEPLOYMENT##*/}
-          export PORTAL=$(echo $D | sed s/.yaml// | sed s/~\*//)
-          ${{ env.SCRIPT_READ_KEYS }}
 
       - name: Run custom Apiable GitHub Action
         id: run-apiable-action
         uses: ./
         with:
-          api_key: ${{ env.APIABLE_DEVELOPER_PORTAL_CLIENT_ID }}
-          api_secret: ${{ env.APIABLE_DEVELOPER_PORTAL_CLIENT_SECRET }}
+          api_key: ${{ secrets.APIABLE_DEVELOPER_PORTAL_CLIENT_ID }}
+          api_secret: ${{ secrets.APIABLE_DEVELOPER_PORTAL_CLIENT_SECRET }}
           api_url: "https://dev.api.apiable.io"
           open_api_spec_url: "https://dev-api.apiable.io/api/int/public/v3/api-docs"
           planid: "659fa46a2f08a41f65664bba"
