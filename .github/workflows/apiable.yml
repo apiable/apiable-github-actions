@@ -70,7 +70,7 @@ jobs:
 
       - name: Run custom Apiable GitHub Action
         id: run-apiable-action
-        uses: .
+        uses: ./
         with:
           api_key: ${{ env.APIABLE_DEVELOPER_PORTAL_CLIENT_ID }}
           api_secret: ${{ env.APIABLE_DEVELOPER_PORTAL_CLIENT_SECRET }}
