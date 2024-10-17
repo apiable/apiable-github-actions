@@ -26,38 +26,37 @@ This action requires the following inputs:
 Here’s an example GitHub Actions workflow that uses this custom action:
 
 \`\`\`yaml
-name: Update Apiable Documentation
+name: setup
 
 on:
 push:
 branches:
-- main
+- master
 paths-ignore:
 - '*.md'
 
 jobs:
-update-apiable-docs:
+cicd:
 runs-on: ubuntu-latest
 steps:
-# Step 1: Checkout the repository
-- name: Checkout repository
-uses: actions/checkout@v3
 
-      # Step 2: Run the custom Apiable GitHub Action
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Run custom Apiable GitHub Action
         id: run-apiable-action
-        uses: .
+        uses: ./
         with:
-          api_key: \${{ env.APIABLE_DEVELOPER_PORTAL_CLIENT_ID }}
-          api_secret: \${{ env.APIABLE_DEVELOPER_PORTAL_CLIENT_SECRET }}
+          api_key: \${{ secrets.APIABLE_DEVELOPER_PORTAL_CLIENT_ID }}
+          api_secret: \${{ secrets.APIABLE_DEVELOPER_PORTAL_CLIENT_SECRET }}
           api_url: "https://dev.api.apiable.io"
           open_api_spec_url: "https://dev-api.apiable.io/api/int/public/v3/api-docs"
           planid: "659fa46a2f08a41f65664bba"
 
-      # Step 3: Output the result of the action
-      - name: Display Action Output
+      # Step 3: Get the output from the custom action
+      - name: Get Action Output
         run: |
-          echo "Apiable Action Response: \${{ steps.run-apiable-action.outputs.response }}"
+          echo "Action Response: \${{ steps.run-apiable-action.outputs.response }}"
 \`\`\`
 
 ### Explanation of the Example Workflow:
@@ -72,8 +71,22 @@ To use this action in your workflow, make sure to provide the required environme
 
 1. Go to **Settings > Secrets and Variables > Actions** in your repository.
 2. Add the following secrets:
-    - `APIABLE_DEVELOPER_PORTAL_CLIENT_ID`: Your Apiable developer portal client ID.
-    - `APIABLE_DEVELOPER_PORTAL_CLIENT_SECRET`: Your Apiable developer portal client secret.
+  - `APIABLE_DEVELOPER_PORTAL_CLIENT_ID`: Your Apiable developer portal client ID.
+  - `APIABLE_DEVELOPER_PORTAL_CLIENT_SECRET`: Your Apiable developer portal client secret.
+
+Below are two screenshots to guide you through the setup:
+
+### 1. Obtaining the Client ID and Secret
+
+To get your `client_id` and `client_secret`, go to [Apiable Subscriptions](https://developer.apiable.io/subscriptions) and select your subscription. The masked example below shows where to find the Client ID and Secret.
+
+![Client ID and Secret](./resources/portal.png)
+
+### 2. Adding GitHub Secrets
+
+Once you have the `client_id` and `client_secret`, add them to your repository’s secrets in GitHub as shown below.
+
+![GitHub Secrets Setup](./resources/github.png)
 
 ## Outputs
 

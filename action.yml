@@ -29,7 +29,6 @@ runs:
       with:
         python-version: '3.12'
     - name: Install Dependencies
-      working-directory: .github/actions/apiable
       shell: bash
       run: |
         pip install -r requirements.txt
