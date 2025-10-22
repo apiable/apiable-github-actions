@@ -63,7 +63,7 @@ def update_documentation(api_url, token, open_api_url, docid):
     payload = [
         {
             "op": "replace",
-            "path": "url",
+            "path": "/url",
             "value": open_api_url
         }
     ]
