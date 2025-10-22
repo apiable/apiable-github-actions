@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run custom Apiable GitHub Action
-        id: run-apiable-action@v2
+        id: run-apiable-action
         uses: ./
         with:
           api_key: ${{ secrets.APIABLE_DEVELOPER_PORTAL_CLIENT_ID }}
@@ -28,4 +28,4 @@ jobs:
       # Step 3: Get the output from the custom action
       - name: Get Action Output
         run: |
-          echo "Action Response: ${{ steps.run-apiable-action@v2.outputs.response }}"
+          echo "Action Response: ${{ steps.run-apiable-action.outputs.response }}"

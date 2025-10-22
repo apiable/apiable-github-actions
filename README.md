@@ -25,7 +25,7 @@ This action requires the following inputs:
 
 Here’s an example GitHub Actions workflow that uses this custom action:
 
-\`\`\`yaml
+```yaml
 name: setup
 
 on:
@@ -44,8 +44,8 @@ steps:
         uses: actions/checkout@v3
 
       - name: Run custom Apiable GitHub Action
-        id: run-apiable-action@v2
-        uses: ./@v2
+        id: run-apiable-action
+        uses: apiable/apiable-github-actions@v2
         with:
           api_key: \${{ secrets.APIABLE_DEVELOPER_PORTAL_CLIENT_ID }}
           api_secret: \${{ secrets.APIABLE_DEVELOPER_PORTAL_CLIENT_SECRET }}
@@ -53,11 +53,10 @@ steps:
           open_api_spec_url: "https://dev-api.apiable.io/api/int/public/v3/api-docs"
           docid: "659fa46a2f08a41f65664bba"
 
-      # Step 3: Get the output from the custom action
       - name: Get Action Output
         run: |
-          echo "Action Response: \${{ steps.run-apiable-action@v2.outputs.response }}"
-\`\`\`
+          echo "Action Response: \${{ steps.run-apiable-action.outputs.response }}"
+```
 
 ### Explanation of the Example Workflow:
 
