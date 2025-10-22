@@ -1,6 +1,7 @@
 name: 'Apiable API Automation Action'
 description: 'A custom GitHub action for API automation with Apiable'
 author: 'Apiable'
+
 inputs:
   api_key:
     description: 'API Key'
@@ -25,7 +26,7 @@ runs:
   using: 'composite'
   steps:
     - name: Install Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.12'
     - name: Install Dependencies
