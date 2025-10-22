@@ -56,7 +56,7 @@ def upload_openapi_spec(api_url, token):
 def update_documentation(api_url, token, open_api_url, docid):
     url = f"{api_url}/api/docs/{docid}"
     headers = {
-        "X-API-Version": "",
+        "X-API-Version": "latest",
         "Authorization": f"Bearer {token}",
         "content-type": "application/json"
     }
