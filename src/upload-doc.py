@@ -53,23 +53,21 @@ def upload_openapi_spec(api_url, token):
             logging.error(f"Failed to upload OpenAPI spec: {response.text}")
             raise Exception(f"Failed to upload OpenAPI spec: {response.text}")
 
-def update_documentation(api_url, token, open_api_url, planid):
-    version = os.popen("date +%Y-%m-%d").read().strip()
-    url = f"{api_url}/api/plans/{planid}/docs"
+def update_documentation(api_url, token, open_api_url, docid):
+    url = f"{api_url}/api/docs/{docid}"
     headers = {
-        "accept": "application/json",
-        "X-API-Version": "latest",
+        "X-API-Version": "",
         "Authorization": f"Bearer {token}",
         "content-type": "application/json"
     }
-    data = {
-        "version": version,
-        "active": True,
-        "retrievalType": "CICD",
-        "url": open_api_url,
-        "name": f"Documentation v{version}"
-    }
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    payload = [
+        {
+            "op": "replace",
+            "path": "url",
+            "value": open_api_url
+        }
+    ]
+    response = requests.patch(url, json=payload, headers=headers)
     if response.status_code == 200:
         logging.info("Documentation updated successfully.")
         return response.json()
@@ -82,7 +80,7 @@ def main():
     api_secret = os.environ.get("api_secret")
     api_url = os.environ.get("api_url")
     open_api_spec_url = os.environ.get("open_api_spec_url")
-    planid = os.environ.get("planid")
+    docid = os.environ.get("docid")
 
     try:
         # Step 1: Generate JWT
@@ -93,7 +91,7 @@ def main():
         open_api_url = upload_openapi_spec(api_url, token)
 
         # Step 3: Update Documentation
-        response = update_documentation(api_url, token, open_api_url, planid)
+        response = update_documentation(api_url, token, open_api_url, docid)
 
         # Log the response to the GitHub Actions output
         logging.info(f"::set-output name=response::{response}")

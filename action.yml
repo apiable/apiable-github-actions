@@ -15,8 +15,8 @@ inputs:
   open_api_spec_url:
     description: 'URL to download OpenAPI spec'
     required: true
-  planid:
-    description: 'The plan id to add documentation to'
+  docid:
+    description: 'The documentation id to update'
     required: true
 outputs:
   response:
@@ -41,7 +41,7 @@ runs:
         echo "api_secret=${{ inputs.api_secret }}" >> $GITHUB_ENV
         echo "api_url=${{ inputs.api_url }}" >> $GITHUB_ENV
         echo "open_api_spec_url=${{ inputs.open_api_spec_url }}" >> $GITHUB_ENV
-        echo "planid=${{ inputs.planid }}" >> $GITHUB_ENV
+        echo "docid=${{ inputs.docid }}" >> $GITHUB_ENV
     - name: upload doc
       shell: bash
       id: upload-doc

@@ -62,3 +62,17 @@ out/
 ### Generated frontend files ###
 /frontend/public/robots.txt
 /frontend/public/sitemap.xml
+
+### Others ###
+.aider*
+.junie*
+*codai*
+CLAUDE*
+GEMINI*
+OPENCODE*
+AGENT*
+.claude*
+.gemini*
+environments*
+.serena
+.*

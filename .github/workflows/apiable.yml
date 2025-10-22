@@ -16,16 +16,16 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run custom Apiable GitHub Action
-        id: run-apiable-action
+        id: run-apiable-action@v2
         uses: ./
         with:
           api_key: ${{ secrets.APIABLE_DEVELOPER_PORTAL_CLIENT_ID }}
           api_secret: ${{ secrets.APIABLE_DEVELOPER_PORTAL_CLIENT_SECRET }}
           api_url: "https://dev.api.apiable.io"
           open_api_spec_url: "https://dev-api.apiable.io/api/int/public/v3/api-docs"
-          planid: "659fa46a2f08a41f65664bba"
+          docid: "68f8a5595fcd8e6b64080a15"
 
       # Step 3: Get the output from the custom action
       - name: Get Action Output
         run: |
-          echo "Action Response: ${{ steps.run-apiable-action.outputs.response }}"
+          echo "Action Response: ${{ steps.run-apiable-action@v2.outputs.response }}"
